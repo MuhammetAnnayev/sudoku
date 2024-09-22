@@ -2,16 +2,17 @@
 import React from 'react';
 import { useState } from 'react';
 
+// Empty initial:
 // const initial = [
-//   [-1, -1, 6, 5, -1, -1, -1, -1, -1],
-//   [7, -1, 5, -1, -1, 2, 3, -1, -1],
-//   [-1, 3, -1, -1, -1, -1, -1, 8, -1],
-//   [-1, 5, -1, -1, 9, 6, -1, 7, -1],
-//   [1, -1, 4, -1, -1, -1, -1, -1, 8],
-//   [-1, -1, -1, 8, 2, -1, -1, -1, -1, -1],
-//   [-1, 2, -1, -1, -1, -1, -1, 9, -1],
-//   [-1, -1, 7, 2, -1, -1, 4, -1, -1],
-//   [-1, -1, -1, -1, -1, 7, 5, -1, -1]
+//   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+//   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+//   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+//   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+//   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+//   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+//   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+//   [-1, -1, -1, -1, -1, -1, -1, -1, -1],
+//   [-1, -1, -1, -1, -1, -1, -1, -1, -1]
 // ]
 
 const initial = [
@@ -38,11 +39,11 @@ function App(){
     if (val === -1 || val>=1 && val <= 9){
       grid[row][col] = val;
     }
-    setSudokuArr(grid)
+    setSudokuArr(grid);
   }
 
   function checkRow(grid, row, num){
-    return grid[row].indexOf(num) === -1
+    return grid[row].indexOf(num) === -1;
   }
 
   function checkCol(grid, col, num){
@@ -103,7 +104,7 @@ function App(){
   }
 
   function solveSudoku(){
-    let sudoku = getDeepCopy(initial);
+    let sudoku = getDeepCopy(initial); // to give your own sudoku change initial --> sudokuArr
     solver(sudoku);
     setSudokuArr(sudoku);
   }
@@ -111,6 +112,37 @@ function App(){
   function resetSudoku(){
     let sudoku = getDeepCopy(initial);
     setSudokuArr(sudoku);
+  }
+
+  function compareSudoku(currentSudoku, solvedSudoku){
+    let res = {
+      isComplete: true,
+      isSolvable: true
+    }
+    for (var i=0; i<9; i++){
+      for (var j=0; j<9; j++){
+        if (currentSudoku[i][j] != solvedSudoku[i][j]){
+          if (currentSudoku[i][j] != -1){
+            res.isSolvable = false;
+          }
+          res.isComplete = false;
+        }
+      }
+    }
+    return res;
+  }
+
+  function checkSudoku(){
+    let sudoku = getDeepCopy(initial);
+    solver(sudoku);
+    let compare = compareSudoku(sudokuArr, sudoku);
+    if (compare.isComplete){
+      alert("Congrats!! You have done!")
+    } else if (compare.isSolvable){
+      alert('Keep going!');
+    } else{
+      alert("Sudoku can't be solved. Try again!");
+    }
   }
 
   return(
@@ -127,7 +159,8 @@ function App(){
                       <input onChange={(e) => onInputChange(e, row, col)} 
                       value={sudokuArr[row][col] === -1 ? '' : sudokuArr[row][col]} 
                       className='cellInput' 
-                      disabled={initial[row][col] !== -1}/>
+                      disabled={initial[row][col] !== -1}
+                      />
                     </td>
                   })}
                 </tr>
@@ -136,6 +169,7 @@ function App(){
           </tbody>
         </table>
         <div className='buttonContainer'>
+          <button className='check' onClick={checkSudoku}>Check</button>
           <button className='solveButton' onClick={solveSudoku}>Solve</button>
           <button className='reset' onClick={resetSudoku}>Reset</button>
         </div>

@@ -35,6 +35,15 @@ td{
 .buttonContainer{
   margin-top: 20px;
 }
+.check{
+  background-color: rgb(212, 241, 28);
+  font-weight: bold;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  color:rgb(20, 13, 5);
+}
 
 .solveButton{
   background-color: rgb(68, 38, 238);
